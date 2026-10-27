@@ -9,7 +9,7 @@ class SinAcentosNiEspeciales implements ValidationRule
 {
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (! is_string($value) || ! preg_match('/^[A-Za-z0-9 \-]+$/', $value)) {
+        if (! is_string($value) || ! preg_match('/\A[A-Za-z0-9 \-]+\z/', $value)) {
             $fail('El campo :attribute solo admite letras sin acentos, números, espacios y guiones.');
         }
     }

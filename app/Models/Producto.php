@@ -52,6 +52,6 @@ class Producto extends Model
     /** Lo que la tienda puede mostrar: activo y con vigencia de hoy en adelante (SoftDeletes ya excluye los eliminados). */
     public function scopeVisibles(Builder $query): void
     {
-        $query->where('activo', true)->whereDate('fecha_vigencia', '>=', today());
+        $query->where('activo', true)->where('fecha_vigencia', '>=', today()->toDateString());
     }
 }

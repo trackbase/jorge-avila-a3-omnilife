@@ -27,6 +27,7 @@ class SinAcentosNiEspecialesTest extends TestCase
             'signo de exclamacion' => ['Oferta!'],
             'simbolo de moneda' => ['Precio $10'],
             'guion bajo' => ['batido_vainilla'],
+            'salto de linea final' => ["Batido\n"],
             'vacio' => [''],
             'no es texto' => [123],
         ];
