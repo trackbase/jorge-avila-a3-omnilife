@@ -6,12 +6,14 @@ use App\Livewire\Admin\Login;
 use App\Livewire\Admin\Productos;
 use App\Livewire\Tienda\Carrito;
 use App\Livewire\Tienda\Catalogo;
+use App\Livewire\Tienda\Checkout;
 use App\Livewire\Tienda\ProductoDetalle;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', Catalogo::class)->name('tienda.catalogo');
 Route::get('/producto/{sku}', ProductoDetalle::class)->name('tienda.producto');
 Route::get('/carrito', Carrito::class)->name('tienda.carrito');
+Route::get('/checkout', Checkout::class)->name('tienda.checkout');
 
 Route::get('/admin/login', Login::class)->middleware('guest')->name('login');
 

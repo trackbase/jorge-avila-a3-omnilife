@@ -62,6 +62,9 @@
                     <div class="card-body">
                         <h2 class="h5 mb-3">Resumen</h2>
                         <x-resumen-totales :$totales />
+                        <a href="{{ route('tienda.checkout') }}" class="btn btn-primary btn-lg w-100 mt-3">
+                            Continuar al pago <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
