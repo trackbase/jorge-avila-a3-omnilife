@@ -48,9 +48,9 @@ php artisan storage:link
 npm install
 npm run build
 ```
-En Laragon: **Menu → Apache → Reload** (o *Stop/Start All*) para que aparezca `tienda.test`. Sin Laragon, apunta un virtual host a la carpeta `public/` o usa `php artisan serve` y ajusta `APP_URL`.
+En Laragon: **Menu → Apache → Reload** (o *Stop/Start All*) para que aparezca `tienda.test`. Sin Laragon, apunta un virtual host a la carpeta `public/` (ver la nota sobre `php artisan serve` abajo).
 
-> El pago simulado es una petición HTTP de la app a su propia API (`route('api.pagos.simular')`, en el mismo host). Con `php artisan serve` usa varios workers (`PHP_CLI_SERVER_WORKERS=4`, ya está en `.env.example`) para que esa petición no se quede esperando.
+> El pago simulado es una petición HTTP de la app a su propia API (`route('api.pagos.simular')`, en el mismo host), así que el servidor debe atender dos peticiones a la vez. Usa Laragon/Apache o un virtual host. Con `php artisan serve` hay un solo proceso: la llamada al banco espera hasta el timeout y el pedido queda rechazado. En macOS/Linux se resuelve con `php artisan serve --no-reload`, que respeta `PHP_CLI_SERVER_WORKERS=4`; en Windows el servidor integrado de PHP no admite workers.
 
 Los datos de demostración incluyen:
 - El usuario administrador.
