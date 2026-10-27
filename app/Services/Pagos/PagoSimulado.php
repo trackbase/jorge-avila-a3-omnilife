@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 /** Consume el mock REST POST /api/pagos/simular como si fuera un banco externo. */
 class PagoSimulado implements PasarelaPago
 {
-    public function cobrar(string $numeroTarjeta, string $monto, string $referencia): ResultadoPago
+    public function cobrar(#[\SensitiveParameter] string $numeroTarjeta, string $monto, string $referencia): ResultadoPago
     {
         try {
             // Sin retry: reintentar un cobro puede duplicar el cargo.

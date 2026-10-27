@@ -24,7 +24,7 @@ class PedidoService
      *
      * @throws PedidoNoConfirmado
      */
-    public function confirmar(string $correo, string $numeroTarjeta): Pedido
+    public function confirmar(string $correo, #[\SensitiveParameter] string $numeroTarjeta): Pedido
     {
         $pedido = $this->crearPrePedido($correo);
 
