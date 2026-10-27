@@ -13,15 +13,30 @@
 <body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark" x-data="{ abierto: false }">
         <div class="container-fluid px-lg-4">
-            <span class="navbar-brand marca">OMNILIFE <span class="text-acento">· Demo</span> <small class="fw-normal fs-6 text-white-50">Admin</small></span>
+            <a class="navbar-brand marca" href="{{ route('admin.dashboard') }}">OMNILIFE <span class="text-acento">· Demo</span> <small class="fw-normal fs-6 text-white-50">Admin</small></a>
             <button class="navbar-toggler" type="button" aria-label="Abrir menú" @click="abierto = !abierto">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" :class="{ 'show': abierto }">
+                @auth
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a @class(['nav-link', 'active' => request()->routeIs('admin.dashboard')]) href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Panel</a>
+                        </li>
+                    </ul>
+                @endauth
                 <ul class="navbar-nav ms-auto align-items-lg-center">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('tienda.catalogo') }}"><i class="bi bi-shop"></i> Ver tienda</a>
                     </li>
+                    @auth
+                        <li class="nav-item">
+                            <form method="POST" action="{{ route('admin.logout') }}">
+                                @csrf
+                                <button type="submit" class="nav-link"><i class="bi bi-box-arrow-right"></i> Salir ({{ auth()->user()->name }})</button>
+                            </form>
+                        </li>
+                    @endauth
                 </ul>
             </div>
         </div>
