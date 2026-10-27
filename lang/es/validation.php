@@ -9,6 +9,7 @@ return [
     'date' => 'El campo :attribute no es una fecha válida.',
     'decimal' => 'El campo :attribute debe tener :decimal decimales.',
     'digits' => 'El campo :attribute debe tener :digits dígitos.',
+    'digits_between' => 'El campo :attribute debe tener entre :min y :max dígitos.',
     'email' => 'El campo :attribute debe ser un correo válido.',
     'exists' => 'El :attribute seleccionado no es válido.',
     'gt' => [
@@ -28,6 +29,7 @@ return [
         'string' => 'El campo :attribute debe tener al menos :min caracteres.',
     ],
     'numeric' => 'El campo :attribute debe ser un número.',
+    'regex' => 'El formato del campo :attribute no es válido.',
     'required' => 'El campo :attribute es obligatorio.',
     'string' => 'El campo :attribute debe ser texto.',
     'unique' => 'El :attribute ya está registrado.',
@@ -43,6 +45,9 @@ return [
         'precio_usd' => 'precio en USD',
         'precio_mxn' => 'precio en MXN',
         'fecha_vigencia' => 'fecha de vigencia',
+        'numeroTarjeta' => 'número de tarjeta',
+        'numero_tarjeta' => 'número de tarjeta',
+        'cvv' => 'CVV',
     ],
 
 ];
