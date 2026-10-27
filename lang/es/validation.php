@@ -36,6 +36,13 @@ return [
         'email' => 'correo electrónico',
         'password' => 'contraseña',
         'correo' => 'correo electrónico',
+        'sku' => 'SKU',
+        'categoria_id' => 'categoría',
+        'descripcion_corta' => 'descripción corta',
+        'descripcion_larga' => 'descripción larga',
+        'precio_usd' => 'precio en USD',
+        'precio_mxn' => 'precio en MXN',
+        'fecha_vigencia' => 'fecha de vigencia',
     ],
 
 ];

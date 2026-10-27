@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Producto extends Model
 {
@@ -40,6 +42,11 @@ class Producto extends Model
     public function categoria(): BelongsTo
     {
         return $this->belongsTo(Categoria::class);
+    }
+
+    protected function imagenUrl(): Attribute
+    {
+        return Attribute::get(fn () => Storage::disk('public')->url($this->imagen));
     }
 
     /** Lo que la tienda puede mostrar: activo y con vigencia de hoy en adelante (SoftDeletes ya excluye los eliminados). */
