@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-    @vite(['resources/scss/app.scss', 'resources/js/app.js'])
+    @vite(['resources/scss/app.scss', 'resources/js/app.js', 'resources/js/admin.js'])
     @livewireStyles
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -25,6 +25,9 @@
                         </li>
                         <li class="nav-item">
                             <a @class(['nav-link', 'active' => request()->routeIs('admin.productos.*')]) href="{{ route('admin.productos.index') }}"><i class="bi bi-box-seam"></i> Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a @class(['nav-link', 'active' => request()->routeIs('admin.pedidos.*')]) href="{{ route('admin.pedidos.index') }}"><i class="bi bi-receipt"></i> Pedidos</a>
                         </li>
                     </ul>
                 @endauth

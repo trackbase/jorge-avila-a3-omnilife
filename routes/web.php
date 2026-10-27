@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\CerrarSesionController;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Login;
+use App\Livewire\Admin\Pedidos;
 use App\Livewire\Admin\Productos;
 use App\Livewire\Tienda\Carrito;
 use App\Livewire\Tienda\Catalogo;
@@ -25,4 +26,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/productos/nuevo', Productos\Formulario::class)->name('productos.crear');
     Route::get('/productos/{producto}', Productos\Detalle::class)->name('productos.detalle');
     Route::get('/productos/{producto}/editar', Productos\Formulario::class)->name('productos.editar');
+
+    Route::get('/pedidos', Pedidos\Index::class)->name('pedidos.index');
 });
