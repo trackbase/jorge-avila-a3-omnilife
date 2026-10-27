@@ -17,7 +17,8 @@
         <div class="toast show align-items-center border-0" :class="'text-bg-' + (toast.tipo ?? 'success')" role="status">
             <div class="d-flex">
                 <div class="toast-body" x-text="toast.mensaje"></div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Cerrar" @click="quitar(toast.id)"></button>
+                <button type="button" class="btn-close me-2 m-auto" :class="{ 'btn-close-white': toast.tipo !== 'warning' }"
+                        aria-label="Cerrar" @click="quitar(toast.id)"></button>
             </div>
         </div>
     </template>

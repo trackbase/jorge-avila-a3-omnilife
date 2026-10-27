@@ -56,12 +56,19 @@ class ProductoForm extends Form
             'nombre' => ['required', 'string', 'max:120', new SinAcentosNiEspeciales],
             'descripcion_corta' => ['required', 'string', 'max:255'],
             'descripcion_larga' => ['required', 'string', 'max:5000'],
-            'precio_usd' => ['required', 'numeric', 'gt:0', 'max:999999'],
-            'precio_mxn' => ['required', 'numeric', 'gt:0', 'max:9999999'],
+            'precio_usd' => ['required', 'numeric', 'decimal:0,2', 'gt:0', 'max:999999'],
+            'precio_mxn' => ['required', 'numeric', 'decimal:0,2', 'gt:0', 'max:9999999'],
             'stock' => ['required', 'integer', 'min:0', 'max:999999'],
             'fecha_vigencia' => ['required', 'date'],
             'activo' => ['boolean'],
             'imagen' => [$this->producto ? 'nullable' : 'required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'sku.unique' => 'El SKU ya existe (puede ser de un producto eliminado: restáuralo desde "Ver eliminados").',
         ];
     }
 
@@ -78,6 +85,10 @@ class ProductoForm extends Form
 
     public function guardar(): Producto
     {
+        // Livewire no pasa por el middleware TrimStrings: se recorta aquí.
+        $this->sku = trim($this->sku);
+        $this->nombre = trim($this->nombre);
+
         $datos = $this->validate();
         unset($datos['imagen']);
 

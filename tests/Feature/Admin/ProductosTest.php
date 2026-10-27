@@ -164,6 +164,27 @@ class ProductosTest extends TestCase
         $this->formularioCon($this->datosValidos(['precio_usd' => 'abc']))
             ->call('guardar')
             ->assertHasErrors(['form.precio_usd' => 'numeric']);
+
+        // Sin la regla decimal, 0.004 pasaría gt:0 y se guardaría como 0.00.
+        $this->formularioCon($this->datosValidos(['precio_usd' => '0.004']))
+            ->call('guardar')
+            ->assertHasErrors(['form.precio_usd' => 'decimal']);
+    }
+
+    public function test_recorta_espacios_del_sku_y_del_nombre(): void
+    {
+        Producto::factory()->create(['sku' => 'DUP-002']);
+
+        $this->formularioCon($this->datosValidos(['sku' => ' DUP-002 ']))
+            ->call('guardar')
+            ->assertHasErrors(['form.sku' => 'unique'])
+            ->assertSee('restáuralo desde');
+
+        $this->formularioCon($this->datosValidos(['sku' => ' NUEVO-9 ', 'nombre' => ' Batido Limpio ']))
+            ->call('guardar')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('productos', ['sku' => 'NUEVO-9', 'nombre' => 'Batido Limpio']);
     }
 
     public function test_todos_los_campos_son_requeridos(): void
@@ -217,6 +238,35 @@ class ProductosTest extends TestCase
             ->assertDontSee('DEL-001');
 
         $this->assertSoftDeleted($producto);
+    }
+
+    public function test_al_eliminar_el_ultimo_de_la_pagina_regresa_a_la_anterior(): void
+    {
+        foreach (range(1, 11) as $i) {
+            Producto::factory()->create(['sku' => sprintf('PAG-%03d', $i)]);
+        }
+
+        Livewire::test(Index::class)
+            ->call('ordenarPor', 'sku')
+            ->call('gotoPage', 2)
+            ->call('eliminar', Producto::where('sku', 'PAG-011')->value('id'))
+            ->assertSee('PAG-010')
+            ->assertDontSee('Aún no hay productos');
+    }
+
+    public function test_ver_eliminados_y_restaurar(): void
+    {
+        $producto = Producto::factory()->create(['sku' => 'RES-001']);
+        $producto->delete();
+
+        Livewire::test(Index::class)
+            ->assertDontSee('RES-001')
+            ->set('eliminados', true)
+            ->assertSee('RES-001')
+            ->call('restaurar', $producto->id)
+            ->assertDispatched('toast');
+
+        $this->assertNotSoftDeleted($producto);
     }
 
     public function test_un_producto_eliminado_no_tiene_detalle_ni_edicion(): void

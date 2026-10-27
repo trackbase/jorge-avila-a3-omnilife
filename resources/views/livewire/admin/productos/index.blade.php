@@ -2,7 +2,9 @@
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
         <div>
             <h1 class="h3 mb-0">Productos</h1>
-            <p class="text-body-secondary small mb-0">{{ $productos->total() }} productos en el catálogo (sin eliminados).</p>
+            <p class="text-body-secondary small mb-0">
+                {{ $productos->total() }} {{ $eliminados ? 'productos eliminados' : 'productos en el catálogo (sin eliminados)' }}.
+            </p>
         </div>
         <a href="{{ route('admin.productos.crear') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nuevo</a>
     </div>
@@ -15,6 +17,10 @@
                        wire:model.live.debounce.300ms="buscar" aria-label="Buscar productos">
             </div>
             <div class="spinner-border spinner-border-sm text-primary" role="status" wire:loading.delay wire:target="buscar"></div>
+            <div class="form-check form-switch ms-auto mb-0">
+                <input id="eliminados" type="checkbox" role="switch" class="form-check-input" wire:model.live="eliminados">
+                <label for="eliminados" class="form-check-label small">Ver eliminados</label>
+            </div>
         </div>
 
         <div class="table-responsive">
@@ -52,17 +58,23 @@
                                 </span>
                             </td>
                             <td class="text-end text-nowrap">
-                                <a href="{{ route('admin.productos.detalle', $producto) }}" class="btn btn-sm btn-outline-secondary" title="Detalle"><i class="bi bi-eye"></i></a>
-                                <a href="{{ route('admin.productos.editar', $producto) }}" class="btn btn-sm btn-outline-primary" title="Editar"><i class="bi bi-pencil"></i></a>
-                                <button type="button" class="btn btn-sm btn-outline-{{ $producto->activo ? 'warning' : 'success' }}"
-                                        wire:click="alternarActivo({{ $producto->id }})" title="{{ $producto->activo ? 'Inactivar' : 'Activar' }}">
-                                    <i class="bi bi-toggle-{{ $producto->activo ? 'on' : 'off' }}"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-danger" title="Eliminar"
-                                        wire:click="eliminar({{ $producto->id }})"
-                                        wire:confirm="¿Eliminar {{ $producto->sku }} · {{ $producto->nombre }}? Dejará de mostrarse en la tienda.">
-                                    <i class="bi bi-trash"></i>
-                                </button>
+                                @if ($producto->trashed())
+                                    <button type="button" class="btn btn-sm btn-outline-success" wire:click="restaurar({{ $producto->id }})">
+                                        <i class="bi bi-arrow-counterclockwise"></i> Restaurar
+                                    </button>
+                                @else
+                                    <a href="{{ route('admin.productos.detalle', $producto) }}" class="btn btn-sm btn-outline-secondary" title="Detalle"><i class="bi bi-eye"></i></a>
+                                    <a href="{{ route('admin.productos.editar', $producto) }}" class="btn btn-sm btn-outline-primary" title="Editar"><i class="bi bi-pencil"></i></a>
+                                    <button type="button" class="btn btn-sm btn-outline-{{ $producto->activo ? 'warning' : 'success' }}"
+                                            wire:click="alternarActivo({{ $producto->id }})" title="{{ $producto->activo ? 'Inactivar' : 'Activar' }}">
+                                        <i class="bi bi-toggle-{{ $producto->activo ? 'on' : 'off' }}"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" title="Eliminar"
+                                            wire:click="eliminar({{ $producto->id }})"
+                                            wire:confirm="¿Eliminar {{ $producto->sku }} · {{ $producto->nombre }}? Dejará de mostrarse en la tienda.">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                @endif
                             </td>
                         </tr>
                     @empty
@@ -71,6 +83,8 @@
                                 <i class="bi bi-inbox fs-1 d-block mb-2"></i>
                                 @if ($buscar !== '')
                                     No hay productos que coincidan con “{{ $buscar }}”.
+                                @elseif ($eliminados)
+                                    No hay productos eliminados.
                                 @else
                                     Aún no hay productos. Crea el primero con “Nuevo”.
                                 @endif

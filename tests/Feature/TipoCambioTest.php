@@ -6,6 +6,7 @@ use App\Exceptions\TipoCambioNoDisponible;
 use App\Livewire\Admin\Productos\Formulario;
 use App\Models\User;
 use App\Services\TipoCambioService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Sleep;
@@ -14,6 +15,8 @@ use Tests\TestCase;
 
 class TipoCambioTest extends TestCase
 {
+    use RefreshDatabase;
+
     private const BANXICO = 'www.banxico.org.mx/*';
 
     private const FRANKFURTER = 'api.frankfurter.dev/*';

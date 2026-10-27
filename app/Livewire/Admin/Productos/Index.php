@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Productos;
 
 use App\Models\Producto;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -26,7 +27,10 @@ class Index extends Component
     #[Url(except: 'asc')]
     public string $direccion = 'asc';
 
-    public function updatedBuscar(): void
+    #[Url(except: false)]
+    public bool $eliminados = false;
+
+    public function updated(): void
     {
         $this->resetPage();
     }
@@ -58,19 +62,38 @@ class Index extends Component
         $this->dispatch('toast', mensaje: "{$producto->sku} eliminado.", tipo: 'danger');
     }
 
+    public function restaurar(int $id): void
+    {
+        $producto = Producto::onlyTrashed()->findOrFail($id);
+        $producto->restore();
+
+        $this->dispatch('toast', mensaje: "{$producto->sku} restaurado.");
+    }
+
     public function render()
+    {
+        $productos = $this->consulta()->paginate(10);
+
+        // Si se eliminó el último registro de la última página, regresa a la página anterior.
+        if ($productos->isEmpty() && $productos->currentPage() > 1) {
+            $this->setPage($productos->lastPage());
+            $productos = $this->consulta()->paginate(10);
+        }
+
+        return view('livewire.admin.productos.index', compact('productos'));
+    }
+
+    private function consulta(): Builder
     {
         $orden = in_array($this->orden, self::COLUMNAS_ORDENABLES, true) ? $this->orden : 'nombre';
         $direccion = $this->direccion === 'desc' ? 'desc' : 'asc';
 
-        $productos = Producto::query()
+        return Producto::query()
+            ->when($this->eliminados, fn ($query) => $query->onlyTrashed())
             ->when($this->buscar !== '', fn ($query) => $query->where(fn ($query) => $query
                 ->where('sku', 'like', "%{$this->buscar}%")
                 ->orWhere('nombre', 'like', "%{$this->buscar}%")))
             ->orderBy($orden, $direccion)
-            ->orderBy('id')
-            ->paginate(10);
-
-        return view('livewire.admin.productos.index', compact('productos'));
+            ->orderBy('id');
     }
 }
