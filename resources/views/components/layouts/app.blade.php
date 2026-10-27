@@ -20,7 +20,10 @@
             <div class="collapse navbar-collapse" :class="{ 'show': abierto }">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('tienda.catalogo') }}"><i class="bi bi-grid"></i> Catálogo</a>
+                        <a @class(['nav-link', 'active' => request()->routeIs('tienda.catalogo', 'tienda.producto')]) href="{{ route('tienda.catalogo') }}"><i class="bi bi-grid"></i> Catálogo</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <livewire:tienda.carrito-icono />
                     </li>
                 </ul>
             </div>
@@ -39,6 +42,8 @@
             <x-aviso-demo />
         </div>
     </footer>
+
+    <x-toasts />
 
     @livewireScripts
 </body>

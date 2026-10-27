@@ -32,3 +32,21 @@ $border-radius: .5rem;
 [x-cloak] {
     display: none !important;
 }
+
+.hero {
+    background: linear-gradient(120deg, $primary 0%, darken($primary, 12%) 55%, $dark 100%);
+}
+
+.producto-imagen {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.producto-card {
+    transition: transform .15s ease, box-shadow .15s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: $box-shadow !important;
+    }
+}
