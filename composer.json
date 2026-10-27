@@ -1,14 +1,16 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "jorge-avila/a3-omnilife",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Prueba técnica aKúbica: tienda en Laravel 12 + Livewire 3 (Jorge Luis Ávila Gaxiola)",
+    "keywords": ["laravel", "livewire", "ecommerce"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "livewire/livewire": "^3",
+        "predis/predis": "^2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
