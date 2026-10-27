@@ -49,21 +49,21 @@
                             <div class="col-12">
                                 <label for="numero" class="form-label">Número de tarjeta</label>
                                 <input id="numero" type="text" required inputmode="numeric" maxlength="19" autocomplete="cc-number"
-                                       x-on:input="$el.value = $el.value.replace(/\D/g, '')" wire:model.blur="numeroTarjeta"
+                                       x-on:input.capture="$el.value = $el.value.replace(/\D/g, '')" wire:model.blur="numeroTarjeta"
                                        class="form-control font-monospace @error('numeroTarjeta') is-invalid @enderror">
                                 @error('numeroTarjeta') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-6">
                                 <label for="vencimiento" class="form-label">Vencimiento</label>
                                 <input id="vencimiento" type="text" required inputmode="numeric" maxlength="5" placeholder="MM/AA" autocomplete="cc-exp"
-                                       x-on:input="$el.value = $el.value.replace(/[^\d\/]/g, '').replace(/^(\d{2})(\d)/, '$1/$2')" wire:model.blur="vencimiento"
+                                       x-on:input.capture="$el.value = $el.value.replace(/[^\d\/]/g, '').replace(/^(\d{2})(\d)/, '$1/$2')" wire:model.blur="vencimiento"
                                        class="form-control font-monospace @error('vencimiento') is-invalid @enderror">
                                 @error('vencimiento') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-6">
                                 <label for="cvv" class="form-label">CVV</label>
                                 <input id="cvv" type="password" required inputmode="numeric" maxlength="4" autocomplete="cc-csc"
-                                       x-on:input="$el.value = $el.value.replace(/\D/g, '')" wire:model.blur="cvv"
+                                       x-on:input.capture="$el.value = $el.value.replace(/\D/g, '')" wire:model.blur="cvv"
                                        class="form-control font-monospace @error('cvv') is-invalid @enderror">
                                 @error('cvv') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
