@@ -78,8 +78,20 @@
                                 <span class="input-group-text">$</span>
                                 <input id="precio_mxn" type="number" step="0.01" min="0.01" wire:model.blur="form.precio_mxn"
                                        class="form-control @error('form.precio_mxn') is-invalid @enderror">
+                                <button type="button" class="btn btn-outline-primary" wire:click="recalcularMxn" wire:loading.attr="disabled"
+                                        wire:target="recalcularMxn" title="Calcular con el tipo de cambio">
+                                    <i class="bi bi-arrow-repeat"></i> Recalcular
+                                </button>
                                 @error('form.precio_mxn') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
+                            @if ($tipoCambio)
+                                <div class="form-text">
+                                    TC {{ number_format($tipoCambio['valor'], 4) }} MXN/USD · {{ $tipoCambio['fuente'] }} ·
+                                    {{ \Illuminate\Support\Carbon::parse($tipoCambio['fecha'])->format('d/m/Y') }}
+                                </div>
+                            @else
+                                <div class="form-text">Se calcula desde el precio USD y puedes ajustarlo.</div>
+                            @endif
                         </div>
                         <div class="col-6 col-lg-12">
                             <label for="stock" class="form-label">Stock</label>

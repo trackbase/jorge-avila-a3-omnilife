@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Admin\Productos;
 
+use App\Exceptions\TipoCambioNoDisponible;
 use App\Livewire\Forms\ProductoForm;
 use App\Models\Categoria;
 use App\Models\Producto;
+use App\Services\TipoCambioService;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -16,11 +18,30 @@ class Formulario extends Component
 
     public ProductoForm $form;
 
+    /** @var array{valor: float, fecha: string, fuente: string}|null */
+    public ?array $tipoCambio = null;
+
     public function mount(?Producto $producto = null): void
     {
         if ($producto?->exists) {
             $this->form->setProducto($producto);
         }
+    }
+
+    public function recalcularMxn(TipoCambioService $servicio): void
+    {
+        $this->form->validateOnly('precio_usd');
+
+        try {
+            $this->tipoCambio = $servicio->obtener();
+        } catch (TipoCambioNoDisponible) {
+            $this->dispatch('toast', mensaje: 'No se pudo obtener el tipo de cambio: captura el precio MXN manualmente.', tipo: 'warning');
+
+            return;
+        }
+
+        $this->form->precio_mxn = number_format($this->form->precio_usd * $this->tipoCambio['valor'], 2, '.', '');
+        $this->form->validateOnly('precio_mxn');
     }
 
     public function guardar()
