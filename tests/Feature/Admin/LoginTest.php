@@ -81,6 +81,27 @@ class LoginTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_el_bloqueo_no_se_evade_con_variantes_unicode_del_correo(): void
+    {
+        $componente = Livewire::test(Login::class)
+            ->set('email', 'admin@tienda.test')
+            ->set('password', 'incorrecta');
+
+        foreach (range(1, 5) as $intento) {
+            $componente->call('login');
+        }
+
+        // "ａ" de ancho completo: MySQL (utf8mb4_unicode_ci) la compara igual que "a".
+        Livewire::test(Login::class)
+            ->set('email', "\u{FF41}dmin@tienda.test")
+            ->set('password', 'Secreta123')
+            ->call('login')
+            ->assertHasErrors('email')
+            ->assertSee('Demasiados intentos');
+
+        $this->assertGuest();
+    }
+
     public function test_cerrar_sesion(): void
     {
         $this->actingAs($this->admin)

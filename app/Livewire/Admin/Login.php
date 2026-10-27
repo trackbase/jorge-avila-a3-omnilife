@@ -29,7 +29,7 @@ class Login extends Component
     {
         $this->validate();
 
-        $llave = Str::lower($this->email).'|'.request()->ip();
+        $llave = Str::transliterate(Str::lower($this->email)).'|'.request()->ip();
 
         if (RateLimiter::tooManyAttempts($llave, self::MAX_INTENTOS)) {
             throw ValidationException::withMessages([
