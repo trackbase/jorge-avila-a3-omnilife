@@ -28,3 +28,7 @@ $border-radius: .5rem;
 .aviso-demo {
     font-size: .8rem;
 }
+
+[x-cloak] {
+    display: none !important;
+}

@@ -23,6 +23,9 @@
                         <li class="nav-item">
                             <a @class(['nav-link', 'active' => request()->routeIs('admin.dashboard')]) href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Panel</a>
                         </li>
+                        <li class="nav-item">
+                            <a @class(['nav-link', 'active' => request()->routeIs('admin.productos.*')]) href="{{ route('admin.productos.index') }}"><i class="bi bi-box-seam"></i> Productos</a>
+                        </li>
                     </ul>
                 @endauth
                 <ul class="navbar-nav ms-auto align-items-lg-center">
@@ -53,6 +56,8 @@
             <x-aviso-demo />
         </div>
     </footer>
+
+    <x-toasts />
 
     @livewireScripts
 </body>
