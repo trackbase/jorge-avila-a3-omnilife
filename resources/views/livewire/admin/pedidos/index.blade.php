@@ -73,9 +73,10 @@
         @endif
     </div>
 
-    {{-- Modal con Alpine (D3): Livewire carga el detalle y lanza "abrir-detalle"; Alpine solo muestra u oculta. --}}
+    {{-- Modal con Alpine (D3): Livewire carga el detalle y lanza "abrir-detalle"; Alpine solo muestra u oculta.
+         x-show.important: .d-block de Bootstrap lleva !important y, sin él, el modal invisible taparía la página. --}}
     <div x-data="{ abierto: false }" x-on:abrir-detalle.window="abierto = true" x-on:keydown.escape.window="abierto = false">
-        <div class="modal d-block" tabindex="-1" role="dialog" aria-modal="true" x-show="abierto" x-cloak x-transition.opacity
+        <div class="modal d-block" tabindex="-1" role="dialog" aria-modal="true" x-show.important="abierto" x-cloak x-transition.opacity
              @click.self="abierto = false">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
