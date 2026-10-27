@@ -65,21 +65,22 @@ class CarritoService
 
         $lineas = collect($cantidades)
             ->filter(fn ($cantidad, $id) => $productos->has($id))
-            ->map(function ($cantidad, $id) use ($productos) {
-                $producto = $productos[$id];
-                $cantidad = min($cantidad, $producto->stock);
-
-                return [
-                    'producto' => $producto,
-                    'cantidad' => $cantidad,
-                    'subtotal_mxn' => round($producto->precio_mxn * $cantidad, 2),
-                    'subtotal_usd' => round($producto->precio_usd * $cantidad, 2),
-                ];
-            });
+            ->map(fn ($cantidad, $id) => $this->linea($productos[$id], min($cantidad, $productos[$id]->stock)));
 
         session()->put(self::LLAVE, $lineas->map(fn ($linea) => $linea['cantidad'])->all());
 
         return $lineas->values();
+    }
+
+    /** @return array{producto: Producto, cantidad: int, subtotal_mxn: float, subtotal_usd: float} */
+    public function linea(Producto $producto, int $cantidad): array
+    {
+        return [
+            'producto' => $producto,
+            'cantidad' => $cantidad,
+            'subtotal_mxn' => round($producto->precio_mxn * $cantidad, 2),
+            'subtotal_usd' => round($producto->precio_usd * $cantidad, 2),
+        ];
     }
 
     /** @return array{subtotal_mxn: float, iva_mxn: float, total_mxn: float, subtotal_usd: float, iva_usd: float, total_usd: float} */
@@ -103,8 +104,8 @@ class CarritoService
         ];
     }
 
-    /** @return array<int, int> */
-    private function cantidades(): array
+    /** @return array<int, int> [producto_id => cantidad] tal como están en la sesión */
+    public function cantidades(): array
     {
         return session()->get(self::LLAVE, []);
     }

@@ -2,21 +2,18 @@
 
 namespace App\Providers;
 
+use App\Services\Pagos\PagoSimulado;
+use App\Services\Pagos\PasarelaPago;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        //
+        // Cambiar a una pasarela real (Stripe, Openpay…) es implementar la interfaz y cambiar esta línea.
+        $this->app->bind(PasarelaPago::class, PagoSimulado::class);
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         //
