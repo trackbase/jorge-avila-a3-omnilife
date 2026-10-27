@@ -99,12 +99,22 @@ class ReporteService
             ->whereBetween('fecha', [$desde, $hasta]);
     }
 
+    /**
+     * Se ignoran las fechas imposibles (2026-02-31 se desbordaría a marzo) y los años a medio teclear:
+     * el <input type="date"> de Chrome envía 0002, 0020 y 0202, que generarían miles de periodos.
+     */
     private function fecha(?string $valor): ?Carbon
     {
         try {
-            return filled($valor) ? Carbon::createFromFormat('!Y-m-d', $valor) : null;
+            $fecha = filled($valor) ? Carbon::createFromFormat('!Y-m-d', $valor) : null;
         } catch (InvalidFormatException) {
             return null;
         }
+
+        if (! $fecha || $fecha->format('Y-m-d') !== $valor || $fecha->year < 2000 || $fecha->year > 2100) {
+            return null;
+        }
+
+        return $fecha;
     }
 }

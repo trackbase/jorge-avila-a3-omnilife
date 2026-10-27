@@ -80,6 +80,7 @@ class ReportesTest extends TestCase
         $this->assertSame(['2026-10-01 00:00:00', '2026-10-31 23:59:59'], [$desde->toDateTimeString(), $hasta->toDateTimeString()]);
 
         $this->assertSame([null, null], $this->reportes->rango('no-es-fecha', ''));
+        $this->assertSame([null, null], $this->reportes->rango('2026-02-31', '0202-10-01'));
     }
 
     public function test_el_detalle_del_pedido_se_abre_en_el_modal(): void
